@@ -3,9 +3,6 @@ import jwt from "jsonwebtoken"
 import bcryt from "bcrypt"
 
 
-export const login = async (req, res) => {
-    
-}
 
 export const register = async (req, res) => {
     const { username, email, password, confirmPassword } = req.body;
@@ -28,5 +25,28 @@ export const register = async (req, res) => {
     }
 }
 
+
+export const login = async (req, res) => {
+    const { email, password } = req.body
+    
+    try {
+        const validUser = await userModel.findOne({ email })
+        if (!validUser) {
+          return res
+            .status(404)
+            .json({ success: true, message: "user not found" });
+        }
+        const validPassword = bcryt.compareSync(password, validUser.password)
+        if (!validPassword) {
+            return res.status(500).json({success:true,message:"Invalid credentials"})
+        }
+        const token=jwt.sign({id:validUser._id},process.env)
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({success:false,error:error.message})
+        
+    }
+}
 
 
