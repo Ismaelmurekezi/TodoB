@@ -2,8 +2,10 @@ import taskModel from "../models/taskModel.js";
 import express from "express";
 
 export const addTask = async (req, res) => {
+    const userId = req.user.id;
   const task = new taskModel({
     task: req.body.task,
+    user:userId
   });
   try {
     await task.save();
