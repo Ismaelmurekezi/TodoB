@@ -31,6 +31,8 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+
+//Middleware to delete confirm password before saving
 userSchema.pre("save", function (next) {
   this.confirmPassword = undefined;
   next();

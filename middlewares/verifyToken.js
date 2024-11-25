@@ -1,7 +1,11 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
-  const token = req.cookies.access_token || req.headers["authorization"];
+  let token = null;
+  const authHeader = req.headers["authorization"];
+  if (authHeader) {
+    token = authHeader.split(" ")[1];
+  }
   if (!token) {
     return res
       .status(403)
@@ -11,9 +15,9 @@ export const verifyToken = (req, res, next) => {
   try {
     const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
       req.user = verified; 
-      console.log(verified)
     next(); 
   } catch (error) {
     res.status(403).json({ success: false, message: "Invalid token" });
   }
 };
+
