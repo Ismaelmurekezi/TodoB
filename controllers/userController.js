@@ -48,7 +48,7 @@ export const login = async (req, res) => {
     const token = jwt.sign({ rest }, process.env.JWT_SECRET_KEY);
     const expireTime = new Date(Date.now() + 3600000);
     res
-      // .cookie("access_token", token, { httpOnly: true, expires: expireTime })
+      .cookie("access_token", token, { httpOnly: true, expires: expireTime })
       .status(201)
       .json({
         sucsess: true,
